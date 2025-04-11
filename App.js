@@ -39,7 +39,6 @@ export default function App() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Tela de Login */}
       {tela === 'Login' && (
         <>
           <Text style={styles.title}>Tela de Login</Text>
@@ -50,7 +49,6 @@ export default function App() {
         </>
       )}
 
-      {/* Tela de Cadastro de Usuário */}
       {tela === 'CadastroUsuario' && (
         <>
           <Text style={styles.title}>Cadastro de Usuário</Text>
@@ -62,7 +60,6 @@ export default function App() {
         </>
       )}
 
-      {/* Tela de Lista de Contatos */}
       {tela === 'Lista' && (
         <>
           <Text style={styles.title}>Lista de Contatos</Text>
@@ -82,7 +79,6 @@ export default function App() {
         </>
       )}
 
-      {/* Tela de Cadastro de Contato */}
       {tela === 'CadastroContato' && (
         <>
           <Text style={styles.title}>Cadastro de Contato</Text>
