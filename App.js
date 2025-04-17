@@ -1,119 +1,193 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, TextInput, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 
-export default function App() {
-  const [tela, setTela] = useState('Login');
-  const [nome, setNome] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [contatos, setContatos] = useState([
-    { id: 1, nome: 'João da Silva', telefone: '(11) 99999-9999' },
-    { id: 2, nome: 'Maria Oliveira', telefone: '(21) 88888-8888' },
-    { id: 3, nome: 'Pedro Santos', telefone: '(31) 77777-7777' },
-  ]);
-  const [contatoEditando, setContatoEditando] = useState(null); 
-
-  const adicionarContato = () => {
-    if (nome && telefone) {
-      setContatos([
-        ...contatos,
-        { id: contatos.length + 1, nome, telefone }
-      ]);
-      setNome('');
-      setTelefone('');
-      setTela('Lista');
-    }
-  };
-
-  const editarContato = () => {
-    if (contatoEditando) {
-      const contatosAtualizados = contatos.map(contato =>
-        contato.id === contatoEditando.id ? { ...contato, nome, telefone } : contato
-      );
-      setContatos(contatosAtualizados);
-      setNome('');
-      setTelefone('');
-      setTela('Lista');
-      setContatoEditando(null);
-    }
-  };
-
+function HomeScreen() {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {tela === 'Login' && (
-        <>
-          <Text style={styles.title}>Tela de Login</Text>
-          <TextInput style={styles.input} placeholder="Email" />
-          <TextInput style={styles.input} placeholder="Senha" secureTextEntry />
-          <Button title="Entrar" onPress={() => setTela('Lista')} />
-          <Button title="Ir para Cadastro de Usuário" onPress={() => setTela('CadastroUsuario')} />
-        </>
-      )}
+    <ScrollView style={styles.container}>
+      
+      <View style={styles.header}>
+        <View style={styles.searchBox}>
+          <Icon name="search" size={20} color="#999" />
+          <TextInput placeholder="Search here ..." style={styles.searchInput} />
+        </View>
+        <View style={styles.profile}>
+          <Image source={{ uri: 'https://placekitten.com/50/50' }} style={styles.avatar} />
+          <View>
+            <Text style={styles.welcome}>Welcome!</Text>
+            <Text style={styles.name}>Donna Stroupe</Text>
+          </View>
+          <Icon name="notifications-none" size={24} style={styles.bellIcon} />
+        </View>
+      </View>
 
-      {tela === 'CadastroUsuario' && (
-        <>
-          <Text style={styles.title}>Cadastro de Usuário</Text>
-          <TextInput style={styles.input} placeholder="Nome" />
-          <TextInput style={styles.input} placeholder="Email" />
-          <TextInput style={styles.input} placeholder="Senha" secureTextEntry />
-          <Button title="Cadastrar" onPress={() => setTela('Login')} />
-          <Button title="Voltar" onPress={() => setTela('Login')} />
-        </>
-      )}
 
-      {tela === 'Lista' && (
-        <>
-          <Text style={styles.title}>Lista de Contatos</Text>
-          {contatos.map((contato) => (
-            <View key={contato.id}>
-              <Text>{contato.nome} - {contato.telefone}</Text>
-              <Button title="Editar" onPress={() => {
-                setNome(contato.nome);
-                setTelefone(contato.telefone);
-                setContatoEditando(contato);
-                setTela('CadastroContato');
-              }} />
-            </View>
-          ))}
-          <Button title="Cadastrar Contato" onPress={() => setTela('CadastroContato')} />
-          <Button title="Sair" onPress={() => setTela('Login')} />
-        </>
-      )}
+      <Text style={styles.sectionTitle}>Category</Text>
+      <View style={styles.categoryContainer}>
+        {[
+          'Resort', 'Homestay', 'Hotel', 'Lodge',
+          'Villa', 'Apartment', 'Hostel', 'See all'
+        ].map((item, index) => (
+          <TouchableOpacity key={index} style={styles.categoryItem}>
+            <Icon name="home" size={30} color="#fff" />
+            <Text style={styles.categoryText}>{item}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
-      {tela === 'CadastroContato' && (
-        <>
-          <Text style={styles.title}>Cadastro de Contato</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nome do contato"
-            value={nome}
-            onChangeText={setNome}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Telefone"
-            value={telefone}
-            onChangeText={setTelefone}
-            keyboardType="phone-pad"
-          />
-          <Button
-            title={contatoEditando ? "Salvar Alterações" : "Salvar Contato"}
-            onPress={contatoEditando ? editarContato : adicionarContato}
-          />
-          <Button title="Voltar para Lista" onPress={() => setTela('Lista')} />
-        </>
-      )}
+    
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Popular Destination</Text>
+        <Icon name="menu" size={20} />
+      </View>
+      <ScrollView horizontal style={styles.imageScroll}>
+        {['https://placekitten.com/200/150', 'https://placekitten.com/201/150', 'https://placekitten.com/202/150'].map((img, index) => (
+          <Image key={index} source={{ uri: img }} style={styles.imageCard} />
+        ))}
+      </ScrollView>
+
+      
+      <Text style={styles.sectionTitle}>Recommended</Text>
+      <View style={styles.recommendContainer}>
+        {['https://placekitten.com/300/150', 'https://placekitten.com/301/150'].map((img, index) => (
+          <Image key={index} source={{ uri: img }} style={styles.recommendImage} />
+        ))}
+      </View>
     </ScrollView>
   );
 }
 
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ color }) => <Icon name="home" size={24} color={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="Explore"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ color }) => <Icon name="explore" size={24} color={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="Search"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ color }) => <Icon name="search" size={24} color={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ color }) => <Icon name="person" size={24} color={color} />,
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, justifyContent: 'center', padding: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
-  input: {
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  header: {
+    marginBottom: 16,
+    backgroundColor: 'lightblue',
+    borderRadius:25,
+    display:'flex',
+    
+  },
+  searchBox: {
+    flexDirection: 'row',
+    backgroundColor: '#EFEFEF',
+    borderRadius: 8,
+    padding: 8,
+    alignItems: 'center',
+  },
+  searchInput: {
+    marginLeft: 8,
+    flex: 1,
+  },
+  profile: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  avatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    marginRight: 8,
+  },
+  welcome: {
+    fontWeight: 'bold',
+  },
+  name: {
+    color: '#777',
+  },
+  bellIcon: {
+    marginLeft: 'auto',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 8,
+  },
+  categoryContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+
+  },
+  categoryItem: {
+    backgroundColor: '#5E50A1',
+    borderRadius: 50,
+    width: '22%',
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 6,
+  },
+  categoryText: {
+    color: '#fff',
+    fontSize: 12,
+    marginTop: 4,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  imageScroll: {
+    marginVertical: 10,
+  },
+  imageCard: {
+    width: 120,
+    height: 90,
+    borderRadius: 8,
+    marginRight: 12,
+  },
+  recommendContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  recommendImage: {
+    width: '48%',
+    height: 100,
+    borderRadius: 8,
   },
 });
